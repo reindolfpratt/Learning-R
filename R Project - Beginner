@@ -1,0 +1,253 @@
+library(tidyverse)
+library(readxl)
+
+path <- "C:/Users/Reindolf Asante-Manu/Downloads/GP Applications.xlsx"
+
+excel_sheets(path)
+EM09 <- read_excel(path, sheet = "EM09")
+EM10 <- read_excel(path,sheet = "EM10")
+EM11 <- read_excel(path,sheet = "EM11")
+EM12 <- read_excel(path,sheet = "EM12")
+XP09 <- read_excel(path, sheet = "XP09")
+XP10 <- read_excel(path, sheet = "XP10")
+XP11 <- read_excel(path, sheet = "XP11")
+XP12 <- read_excel(path, sheet = "XP12")
+
+head(EM10)
+
+Applications <- c(EM09,EM10,EM11,EM12,XP09,XP10,XP11,XP12)
+
+View(Applications)
+
+EM10 <- EM10 %>% 
+  mutate('Full Name' = paste(`First Name(s)`,`Last Name`))
+        
+      
+         View(EM10)
+EM101 <- EM10 %>% 
+  select(`Full Name`,`First Name(s)`, `Last Name`,`What is your current employment status?`,City,Country,Postcode)
+
+
+View(EM101)         
+EM10_new <- na.omit(EM101)
+
+View(EM10_new)
+
+EM10_sep <- separate(EM10_new,`What is your current employment status?`, into = c("Employment Status", "Other"), sep = " ")
+
+EM10_sep %>% 
+  select(-`First Name(s)`,-`Last Name`) %>% 
+  filter('Employment Status' == "Self-employed"| 'City' == 'London')
+
+EM10_sep %>%
+  select(-`First Name(s)`, -`Last Name`) %>%
+  filter(`Employment Status` == "Self-employed" | `City` == "London")
+
+
+EM12 <- EM12 %>% 
+  slice(-c(17,18))
+na.omit(EM12)
+
+EM12 <- EM12 %>% 
+  mutate(`Full Name` = paste(`First Name`,`Last Name`)) %>% 
+  select(-`First Name`,-`Last Name`) %>% 
+  separate(`Alternative Email Address`, into = c("Predicate", "Subject"), sep= "@")
+
+Selected <- EM12 %>%  
+  select(`Full Name`, Address,`Address line 2`, `City/Town`,`State/Region/Province`,Country,`Organisation Sub-Sector`, `Why do you want to join this programme, and what are you hoping to gain from it?` ) %>% 
+  rename("Address 2" = `Address line 2`)
+
+install.packages("openxlsx")
+getwd()
+library(openxlsx)
+write.xlsx(Selected,"C:/Users/Reindolf Asante-Manu/Documents/Clore GP Applications")
+
+
+
+names(EM09)
+
+
+
+
+
+SEM09 <- EM09 %>% 
+  select(`First Name(s)`,`Last Name`,City,Country,`Name of your organisation(s)`,`Organisation Sub-Sector`,`Type of Organisation`,`What is the approximate annual turnover of your organisation?`, `How did you hear about this programme?`,
+         `Your age`,`What is your gender?`,`Do you consider yourself to have a disability according to the terms given in the Equality Act 2010?`, `Your sexual orientation`,
+         `Please select your ethnic background`,`Which religious/belief group do you most identify with?`)
+
+View(SEM09)
+
+
+SEM10 <- EM10 %>% 
+  select(`First Name(s)`,`Last Name`,City,Country,`Name of your organisation(s)`,`Organisation Sub-Sector`,`Type of Organisation`,`What is the approximate annual turnover of your organisation?`, `How did you hear about this programme?`,
+         `Your age`,`What is your gender?`,`Do you consider yourself to have a disability according to the terms given in the Equality Act 2010?`, `Your sexual orientation`,
+         `Please select your ethnic background`,`Which religious/belief group do you most identify with?`)
+
+names(EM11)
+
+SEM11 <- EM11 %>% 
+  select(`First Name`,`Last Name`,`City/Town`,Country,`Name of your organisation(s)`,`Organisation Sub-Sector`,`Type of Organisation`,`What is the approximate annual turnover of your organisation?`, `How did you hear about this programme?`,
+         `Your age`,`What is your gender?`,`Do you consider yourself to have a disability according to the terms given in the Equality Act 2010?`, `Your sexual orientation`,
+         `Select your ethnic background`,`Which religious/belief group do you most identify with?`)
+
+
+
+names(EM12)
+
+SEM12 <- EM12 %>% 
+  select(`First Name`,`Last Name`,`City/Town`,Country,`Name of your organisation(s)`,`Organisation Sub-Sector`,`Type of Organisation`,`What is the approximate annual turnover of your organisation?`, `How did you hear about this programme?`,
+         `Your age`,`What is your gender?`,`Do you consider yourself to have a disability according to the terms given in the Equality Act 2010?`, `Your sexual orientation`,
+         `Select your ethnic background`,`Which religious/belief group do you most identify with?`)
+
+
+SXP09 <- XP09 %>% 
+  mutate(GP = "XP09") %>% 
+  select(`GP`,`First Name(s)`,`Last Name`,City,Country,`Name of your organisation(s)`,`Organisation Sub-Sector`,`Type of Organisation`,`What is the approximate annual turnover of your organisation?`, `How did you hear about this programme?`,
+         `Your age`,`What is your gender?`,`Do you consider yourself to have a disability according to the terms given in the Equality Act 2010?`, `Your sexual orientation`,
+         `Please select your ethnic background`,`Which religious/belief group do you most identify with?`)
+
+
+SEM09 <- EM09 %>% 
+  select(`GP`,`First Name(s)`,`Last Name`,City,Country,`Name of your organisation(s)`,`Organisation Sub-Sector`,`Type of Organisation`,`What is the approximate annual turnover of your organisation?`, `How did you hear about this programme?`,
+         `Your age`,`What is your gender?`,`Do you consider yourself to have a disability according to the terms given in the Equality Act 2010?`, `Your sexual orientation`,
+         `Please select your ethnic background`,`Which religious/belief group do you most identify with?`)
+
+
+SXP10 <- XP10 %>% 
+  mutate(GP = "XP10") %>% 
+  select(`GP`,`First Name(s)`,`Last Name`,City,Country,`Name of your organisation(s)`,`Organisation Sub-Sector`,`Type of Organisation`,`What is the approximate annual turnover of your organisation?`, `How did you hear about this programme?`,
+         `Your age`,`What is your gender?`,`Do you consider yourself to have a disability according to the terms given in the Equality Act 2010?`, `Your sexual orientation`,
+         `Please select your ethnic background`,`Which religious/belief group do you most identify with?`)
+
+
+
+names(XP11)
+
+SXP11 <- XP11 %>% 
+  mutate(GP = "XP11") %>% 
+  select(`GP`,`First Name(s)`,`Last Name`,`City/Town`,Country,`Name of your organisation(s)`,`Additional Comments...46`,`Please indicate the type of impairment which applies to you`,`What is the approximate annual turnover of your organisation?`, `How did you hear about this programme?`,
+         `Your age`,`What is your gender?`,`Do you consider yourself to have a disability according to the terms given in the Equality Act 2010?`, `Your sexual orientation`,
+         `Select your ethnic background`,`Which religious/belief group do you most identify with?`)
+
+
+SXP12 <- XP12 %>% 
+  select(`GP`,`First Name(s)`,`Last Name`,`City/Town`,Country,`Name of your organisation(s)`,`Organisation Sub-Sector`,`Type of Organisation`,`What is the approximate annual turnover of your organisation?`, `How did you hear about this programme?`,
+         `Your age`,`What is your gender?`,`Do you consider yourself to have a disability according to the terms given in the Equality Act 2010?`, `Your sexual orientation`,
+         `Select your ethnic background`,`Which religious/belief group do you most identify with?`)
+
+
+
+SXP12 <- XP12 %>% 
+  rename("First Name" =`First Name(s)`,City = `City/Town`,Sector = `Organisation Sub-Sector`,"Org Type" = `Type of Organisation`,
+         Ethnicity = `Select your ethnic background`)
+
+
+
+SEM12 <- EM12 %>% 
+  rename(City = `City/Town`,Sector = `Organisation Sub-Sector`,"Org Type" = `Type of Organisation`,
+         Ethnicity = `Select your ethnic background`)
+
+
+SEM12 <- EM12 %>% 
+  select(`First Name`,`Last Name`,`City/Town`,Country,`Name of your organisation(s)`,`Organisation Sub-Sector`,`Type of Organisation`,`What is the approximate annual turnover of your organisation?`, `How did you hear about this programme?`,
+         `Your age`,`What is your gender?`,`Do you consider yourself to have a disability according to the terms given in the Equality Act 2010?`, `Your sexual orientation`,
+         `Select your ethnic background`,`Which religious/belief group do you most identify with?`)
+
+SSEM09 <- SEM09 %>% 
+  select(`GP`,`First Name`,`Last Name`,City,Country,`Name of your organisation(s)`,`Sector`,`Org Type`,`What is the approximate annual turnover of your organisation?`, `How did you hear about this programme?`,
+         `Your age`,`What is your gender?`,`Do you consider yourself to have a disability according to the terms given in the Equality Act 2010?`, `Your sexual orientation`,
+         `Ethnicity`,`Which religious/belief group do you most identify with?`)
+
+
+SSEM10 <- SEM10 %>% 
+  select(`GP`,`First Name`,`Last Name`,City,Country,`Name of your organisation(s)`,`Sector`,`Org Type`,`What is the approximate annual turnover of your organisation?`, `How did you hear about this programme?`,
+         `Your age`,`What is your gender?`,`Do you consider yourself to have a disability according to the terms given in the Equality Act 2010?`, `Your sexual orientation`,
+         `Ethnicity`,`Which religious/belief group do you most identify with?`)
+
+
+SSEM11 <- SEM11 %>% 
+  select(`GP`,`First Name`,`Last Name`,City,Country,`Name of your organisation(s)`,`Sector`,`Org Type`,`What is the approximate annual turnover of your organisation?`, `How did you hear about this programme?`,
+         `Your age`,`What is your gender?`,`Do you consider yourself to have a disability according to the terms given in the Equality Act 2010?`, `Your sexual orientation`,
+         `Ethnicity`,`Which religious/belief group do you most identify with?`)
+
+
+SSEM12 <- SEM12 %>% 
+  select(`GP`,`First Name`,`Last Name`,City,Country,`Name of your organisation(s)`,`Sector`,`Org Type`,`What is the approximate annual turnover of your organisation?`, `How did you hear about this programme?`,
+         `Your age`,`What is your gender?`,`Do you consider yourself to have a disability according to the terms given in the Equality Act 2010?`, `Your sexual orientation`,
+         `Ethnicity`,`Which religious/belief group do you most identify with?`)
+
+
+SSXP12 <- SXP12 %>% 
+  select(`GP`,`First Name`,`Last Name`,City,Country,`Name of your organisation(s)`,`Sector`,`Org Type`,`What is the approximate annual turnover of your organisation?`, `How did you hear about this programme?`,
+         `Your age`,`What is your gender?`,`Do you consider yourself to have a disability according to the terms given in the Equality Act 2010?`, `Your sexual orientation`,
+         `Ethnicity`,`Which religious/belief group do you most identify with?`)
+
+
+
+
+All_GP_Application <- bind_rows(SSEM09,SSEM10,SSEM11,SSEM12)
+
+EMALL <- All_GP_Application
+
+
+write.xlsx(EMALL,"C:/Users/Reindolf Asante-Manu/Downloads")
+
+names(SXP10)
+
+SSXP09 <- SXP09 %>% 
+  rename("First Name" =`First Name(s)`,City = `City/Town`,Sector = `Organisation Sub-Sector`,"Org Type" = `Type of Organisation`,
+         Ethnicity = `Select your ethnic background`)
+
+
+
+SSXP09 <- SXP09 %>% 
+  rename("First Name" =`First Name(s)`,Sector = `Organisation Sub-Sector`,"Org Type" = `Type of Organisation`,
+         Ethnicity = `Please select your ethnic background`)
+
+
+
+SSXP11 <- SXP11 %>% 
+  rename("First Name" =`First Name(s)`,City = `City/Town`,Sector = `Additional Comments...46`,"Org Type" = `Please indicate the type of impairment which applies to you`,
+         Ethnicity = `Select your ethnic background`)
+
+SSXP10 <- SXP10 %>% 
+  rename("First Name" =`First Name(s)`,Sector = `Organisation Sub-Sector`,"Org Type" = `Type of Organisation`,
+         Ethnicity = `Please select your ethnic background`)
+
+
+
+XPALL <- bind_rows(SSXP09, SSXP10, SSXP11,SSXP12)
+
+View(XPALL)
+
+write.xlsx(XPALL,"C:/Users/Reindolf Asante-Manu/Downloads")
+
+
+All.Applications <- bind_rows(EMALL,XPALL)
+
+View(All.Applications)
+
+
+
+All.Applications <- All.Applications %>% 
+  slice(-c(86,87))
+
+
+
+write.xlsx(All.Applications,"C:/Users/Reindolf Asante-Manu/Downloads")
+
+# names() shows all the column headers
+names(All.Applications)
+
+All.Applications <- All.Applications %>% 
+  mutate("Full Name" = paste(`First Name`,`Last Name`)) %>% 
+  rename(Organisation = `Name of your organisation(s)`,"Org Income" = 
+           `What is the approximate annual turnover of your organisation?`,"Programme Discovey" = `How did you hear about this programme?`,
+         "Age Range" = `Your age`, Gender = `What is your gender?`, Disability = `Do you consider yourself to have a disability according to the terms given in the Equality Act 2010?`,
+         "Sexual Orientation" = `Your sexual orientation`, Religion = `Which religious/belief group do you most identify with?`)
+
+All.Applications %>% 
+  select(-c(`First Name`,`Last Name`))
+
+
+View(All.Applications)
